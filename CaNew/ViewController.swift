@@ -8,18 +8,104 @@
 
 import UIKit
 
-class ViewController: UIViewController {
-
+class ViewController: UIViewController, UIPageViewControllerDataSource {
+    
+    var pageVC: UIPageViewController?
+    var cardContents = [CardContentViewController]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        
+        let originFrame = self.view.frame
+        let cardFrame = CGRect(x: originFrame.origin.x, y: originFrame.origin.y, width: originFrame.size.width/2, height: originFrame.size.height/2)
+        
+        let card1 = CardContentViewController()
+        card1.index = 0
+        card1.view.backgroundColor = UIColor.gray
+        card1.view.frame = cardFrame
+        
+        let card2 = CardContentViewController()
+        card2.index = 1
+        card2.view.backgroundColor = UIColor.orange
+        card2.view.frame = cardFrame
+        
+        let card3 = CardContentViewController()
+        card3.index = 2
+        card3.view.backgroundColor = UIColor.green
+        card3.view.frame = cardFrame
+        
+        self.cardContents.append(card1)
+        self.cardContents.append(card2)
+        self.cardContents.append(card3)
+        
+        self.setPageVC()
+        self.setupPageControl()
+        
+        if let pageVC = self.pageVC{
+            for subView in pageVC.view.subviews{
+                if let pageControl = subView as? UIPageControl{
+                    pageControl.pageIndicatorTintColor = UIColor.gray
+                    pageControl.currentPageIndicatorTintColor = UIColor.white
+                    pageControl.backgroundColor = UIColor.darkGray
+                }
+            }
+        }
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    func setPageVC(){
+        let pageVC = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: [UIPageViewControllerOptionSpineLocationKey:UIPageViewControllerSpineLocation.mid])
+        pageVC.dataSource = self
+        pageVC.setViewControllers([self.cardContents[0]], direction: .forward, animated: true, completion: nil)
 
+        let originFrame = self.view.frame
+        let cardFrame = CGRect(x: originFrame.origin.x, y: originFrame.origin.y, width: originFrame.size.width, height: originFrame.size.height/2)
+        pageVC.view.frame = cardFrame
 
+        self.addChildViewController(pageVC)
+        self.view.addSubview(pageVC.view)
+        pageVC.didMove(toParentViewController: self)
+        self.pageVC = pageVC
+    }
+    
+    private func setupPageControl() {
+        let appearance = UIPageControl.appearance()
+        appearance.pageIndicatorTintColor = UIColor.gray
+        appearance.currentPageIndicatorTintColor = UIColor.white
+        appearance.backgroundColor = UIColor.darkGray
+    }
+    
+    // MARK: - UIPageViewControllerDataSource
+    func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
+        if let controller = viewController as? CardContentViewController {
+            if controller.index > 0 {
+                return cardContents[controller.index - 1]
+            }
+        }
+        return nil
+    }
+    func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
+        if let controller = viewController as? CardContentViewController {
+            if controller.index < cardContents.count - 1 {
+                return cardContents[controller.index + 1]
+            }
+        }
+        return nil
+    }
+    
+    // MARK: - Page Indicator
+    
+    func presentationCount(for pageViewController: UIPageViewController) -> Int {
+        return cardContents.count
+    }
+    
+    func presentationIndex(for pageViewController: UIPageViewController) -> Int {
+        return 0
+    }
+    
 }
-
