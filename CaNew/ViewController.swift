@@ -53,14 +53,17 @@ class ViewController: UIViewController, UIPageViewControllerDataSource {
         pageVC.dataSource = self
         pageVC.setViewControllers([self.cardContents[0]], direction: .forward, animated: true, completion: nil)
         
-        let originFrame = self.view.frame
-        let cardFrame = CGRect(x: originFrame.origin.x, y: originFrame.origin.y, width: originFrame.size.width, height: originFrame.size.height/2)
-        pageVC.view.frame = cardFrame
-        
         self.addChildViewController(pageVC)
         self.view.addSubview(pageVC.view)
         pageVC.didMove(toParentViewController: self)
         self.pageVC = pageVC
+    
+        let margins = view.layoutMarginsGuide
+        pageVC.view.translatesAutoresizingMaskIntoConstraints = false
+        pageVC.view.leadingAnchor.constraint(equalTo: margins.leadingAnchor).isActive = true
+        pageVC.view.trailingAnchor.constraint(equalTo: margins.trailingAnchor).isActive = true
+        pageVC.view.topAnchor.constraint(equalTo: margins.topAnchor).isActive = true
+        pageVC.view.heightAnchor.constraint(equalTo: margins.widthAnchor).isActive = true
     }
     
     private func setupPageControl() {
