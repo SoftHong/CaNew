@@ -8,10 +8,11 @@
 
 import UIKit
 
-class ViewController: UIViewController, UIPageViewControllerDataSource {
+class ViewController: UIViewController {
     
     var pageVC: UIPageViewController?
     var cardContents = [CardContentViewController]()
+    var settingTableView: CardSettingTableView?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,17 +22,14 @@ class ViewController: UIViewController, UIPageViewControllerDataSource {
         let cardFrame = CGRect(x: originFrame.origin.x, y: originFrame.origin.y, width: originFrame.size.width/2, height: originFrame.size.height/2)
         
         let card1 = CardContentViewController()
-        card1.index = 0
         card1.view.backgroundColor = UIColor.gray
         card1.view.frame = cardFrame
         
         let card2 = CardContentViewController()
-        card2.index = 1
         card2.view.backgroundColor = UIColor.orange
         card2.view.frame = cardFrame
         
         let card3 = CardContentViewController()
-        card3.index = 2
         card3.view.backgroundColor = UIColor.green
         card3.view.frame = cardFrame
         
@@ -39,8 +37,10 @@ class ViewController: UIViewController, UIPageViewControllerDataSource {
         self.cardContents.append(card2)
         self.cardContents.append(card3)
         
+        self.updateIndex()
         self.setPageVC()
         self.setupPageControl()
+        self.setSettingTableView()
     }
     
     override func didReceiveMemoryWarning() {
@@ -48,7 +48,26 @@ class ViewController: UIViewController, UIPageViewControllerDataSource {
         // Dispose of any resources that can be recreated.
     }
     
-    func setPageVC(){
+    fileprivate func setSettingTableView(){
+        
+        let settingTableView = CardSettingTableView.init()
+        self.view.addSubview(settingTableView)
+        
+        settingTableView.translatesAutoresizingMaskIntoConstraints = false
+        
+        let margins = view.layoutMarginsGuide
+        settingTableView.leadingAnchor.constraint(equalTo: margins.leadingAnchor).isActive = true
+        settingTableView.trailingAnchor.constraint(equalTo: margins.trailingAnchor).isActive = true
+        settingTableView.bottomAnchor.constraint(equalTo: margins.bottomAnchor).isActive = true
+        
+        if let pageVC = self.pageVC{
+            settingTableView.topAnchor.constraint(equalTo: pageVC.view.bottomAnchor).isActive = true
+        }else{
+            settingTableView.topAnchor.constraint(equalTo: margins.topAnchor).isActive = true
+        }
+    }
+    
+    fileprivate func setPageVC(){
         let pageVC = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: [UIPageViewControllerOptionSpineLocationKey:UIPageViewControllerSpineLocation.mid])
         pageVC.dataSource = self
         pageVC.setViewControllers([self.cardContents[0]], direction: .forward, animated: true, completion: nil)
@@ -66,14 +85,23 @@ class ViewController: UIViewController, UIPageViewControllerDataSource {
         pageVC.view.heightAnchor.constraint(equalTo: margins.widthAnchor).isActive = true
     }
     
-    private func setupPageControl() {
+    fileprivate func setupPageControl() {
         let appearance = UIPageControl.appearance()
         appearance.pageIndicatorTintColor = UIColor.gray
         appearance.currentPageIndicatorTintColor = UIColor.white
         appearance.backgroundColor = UIColor.darkGray
     }
     
-    // MARK: - UIPageViewControllerDataSource
+    fileprivate func updateIndex(){
+        for (index,element) in self.cardContents.enumerated(){
+            element.index = index
+        }
+    }
+
+}
+
+extension ViewController: UIPageViewControllerDataSource{
+    
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
         if let controller = viewController as? CardContentViewController {
             if controller.index > 0 {
@@ -82,6 +110,7 @@ class ViewController: UIViewController, UIPageViewControllerDataSource {
         }
         return nil
     }
+    
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
         if let controller = viewController as? CardContentViewController {
             if controller.index < cardContents.count - 1 {
@@ -91,8 +120,6 @@ class ViewController: UIViewController, UIPageViewControllerDataSource {
         return nil
     }
     
-    // MARK: - Page Indicator
-    
     func presentationCount(for pageViewController: UIPageViewController) -> Int {
         return cardContents.count
     }
@@ -100,5 +127,4 @@ class ViewController: UIViewController, UIPageViewControllerDataSource {
     func presentationIndex(for pageViewController: UIPageViewController) -> Int {
         return 0
     }
-    
 }
