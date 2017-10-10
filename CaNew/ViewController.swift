@@ -41,16 +41,6 @@ class ViewController: UIViewController, UIPageViewControllerDataSource {
         
         self.setPageVC()
         self.setupPageControl()
-        
-        if let pageVC = self.pageVC{
-            for subView in pageVC.view.subviews{
-                if let pageControl = subView as? UIPageControl{
-                    pageControl.pageIndicatorTintColor = UIColor.gray
-                    pageControl.currentPageIndicatorTintColor = UIColor.white
-                    pageControl.backgroundColor = UIColor.darkGray
-                }
-            }
-        }
     }
     
     override func didReceiveMemoryWarning() {
@@ -62,11 +52,11 @@ class ViewController: UIViewController, UIPageViewControllerDataSource {
         let pageVC = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: [UIPageViewControllerOptionSpineLocationKey:UIPageViewControllerSpineLocation.mid])
         pageVC.dataSource = self
         pageVC.setViewControllers([self.cardContents[0]], direction: .forward, animated: true, completion: nil)
-
+        
         let originFrame = self.view.frame
         let cardFrame = CGRect(x: originFrame.origin.x, y: originFrame.origin.y, width: originFrame.size.width, height: originFrame.size.height/2)
         pageVC.view.frame = cardFrame
-
+        
         self.addChildViewController(pageVC)
         self.view.addSubview(pageVC.view)
         pageVC.didMove(toParentViewController: self)
