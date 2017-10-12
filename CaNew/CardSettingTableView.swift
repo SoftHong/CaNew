@@ -8,9 +8,11 @@
 
 import UIKit
 
-class CardSettingTableView: UITableView {
+class CardSettingTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
 
     var targetCard: CardContentViewController?
+    let reuseCellId = "reuseCardSettingCellId"
+    let sections = ["제목", "설명"]
     
     /*
     // Only override draw() if you perform custom drawing.
@@ -22,33 +24,44 @@ class CardSettingTableView: UITableView {
     
     init(){
         super.init(frame: CGRect.zero, style: .plain)
-        
-        self.delegate = self as? UITableViewDelegate
-        self.dataSource = self as? UITableViewDataSource
+        self.delegate = self
+        self.dataSource = self
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-}
-
-
-extension CardContentViewController: UITableViewDelegate{
     
-}
-
-extension CardContentViewController: UITableViewDataSource{
-
+    
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        return self.sections.count
     }
-
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1
     }
     
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        
+        let sectionLabel = UILabel.init()
+        sectionLabel.text = self.sections[section]
+        
+        return sectionLabel
+    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        return UITableViewCell.init()
+        var cell = UITableViewCell.init()
+        if let reuseableCell = self.dequeueReusableCell(withIdentifier: reuseCellId){
+            cell = reuseableCell
+        }
+        
+        if let targetCard = targetCard, let name = targetCard.name{
+            cell.textLabel?.text = name
+            print("hi")
+        }
+
+        
+        return cell
     }
 }

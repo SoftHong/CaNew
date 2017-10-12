@@ -22,14 +22,17 @@ class ViewController: UIViewController {
         let cardFrame = CGRect(x: originFrame.origin.x, y: originFrame.origin.y, width: originFrame.size.width/2, height: originFrame.size.height/2)
         
         let card1 = CardContentViewController()
+        card1.name = "안녕"
         card1.view.backgroundColor = UIColor.gray
         card1.view.frame = cardFrame
         
         let card2 = CardContentViewController()
+        card2.name = "안녕안녕"
         card2.view.backgroundColor = UIColor.orange
         card2.view.frame = cardFrame
         
         let card3 = CardContentViewController()
+        card3.name = "안녕안녕안녕"
         card3.view.backgroundColor = UIColor.green
         card3.view.frame = cardFrame
         
@@ -46,6 +49,10 @@ class ViewController: UIViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    fileprivate func updateSettingTableView(){
+        
     }
     
     fileprivate func setSettingTableView(){
@@ -70,6 +77,7 @@ class ViewController: UIViewController {
     fileprivate func setPageVC(){
         let pageVC = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: [UIPageViewControllerOptionSpineLocationKey:UIPageViewControllerSpineLocation.mid])
         pageVC.dataSource = self
+        pageVC.delegate = self
         pageVC.setViewControllers([self.cardContents[0]], direction: .forward, animated: true, completion: nil)
         
         self.addChildViewController(pageVC)
@@ -98,6 +106,17 @@ class ViewController: UIViewController {
         }
     }
 
+}
+
+extension ViewController: UIPageViewControllerDelegate{
+    func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
+        
+        if !completed{
+            return
+        }
+        
+        
+    }
 }
 
 extension ViewController: UIPageViewControllerDataSource{

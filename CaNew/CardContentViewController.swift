@@ -27,17 +27,20 @@ class CardContentViewController: UIViewController {
     
     func setContentsView(){
         
-        let nameFrame = CGRect.init(x: self.view.frame.origin.x, y: self.view.frame.origin.y, width: self.view.frame.width, height: self.view.frame.height)
-        let nameLabel = UILabel.init(frame: nameFrame)
-        nameLabel.text = "hello world"
-        nameLabel.textAlignment = .center
-        self.view.addSubview(nameLabel)
-        
-        nameLabel.translatesAutoresizingMaskIntoConstraints = false
-        let margins = view.layoutMarginsGuide
-        nameLabel.leadingAnchor.constraint(equalTo: margins.leadingAnchor).isActive = true
-        nameLabel.trailingAnchor.constraint(equalTo: margins.trailingAnchor).isActive = true
-        nameLabel.centerYAnchor.constraint(equalTo: margins.centerYAnchor).isActive = true
+        if let name = self.name{
+            
+            let nameFrame = CGRect.init(x: self.view.frame.origin.x, y: self.view.frame.origin.y, width: self.view.frame.width, height: self.view.frame.height)
+            let nameLabel = UILabel.init(frame: nameFrame)
+            nameLabel.text = name
+            nameLabel.textAlignment = .center
+            self.view.addSubview(nameLabel)
+            
+            nameLabel.translatesAutoresizingMaskIntoConstraints = false
+            let margins = view.layoutMarginsGuide
+            nameLabel.leadingAnchor.constraint(equalTo: margins.leadingAnchor).isActive = true
+            nameLabel.trailingAnchor.constraint(equalTo: margins.trailingAnchor).isActive = true
+            nameLabel.centerYAnchor.constraint(equalTo: margins.centerYAnchor).isActive = true
+        }
     }
     
     func updateContents(){
