@@ -35,6 +35,9 @@ class CardSettingTableView: UITableView, UITableViewDelegate, UITableViewDataSou
         super.init(frame: CGRect.zero, style: .plain)
         self.delegate = self
         self.dataSource = self
+        self.estimatedRowHeight = 44.0
+        self.rowHeight = UITableViewAutomaticDimension
+        self.sectionHeaderHeight = 44.0
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -64,10 +67,13 @@ class CardSettingTableView: UITableView, UITableViewDelegate, UITableViewDataSou
             cell = reuseableCell
         }
         
-        if let targetCard = targetCard, let name = targetCard.name{
-            cell.textLabel?.text = name
+        if let targetCard = targetCard{
+            if indexPath.section == 0, let name = targetCard.name{
+                cell.textLabel?.text = name
+            }else if indexPath.section == 1, let subName = targetCard.subName{
+                cell.textLabel?.text = subName
+            }
         }
-        
         return cell
     }
     
@@ -76,4 +82,6 @@ class CardSettingTableView: UITableView, UITableViewDelegate, UITableViewDataSou
         self.deselectRow(at: indexPath, animated: true)
         self.customDelegate?.tableView(didSelectRowAt: indexPath)
     }
+    
+
 }

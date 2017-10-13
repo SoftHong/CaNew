@@ -34,26 +34,6 @@ class ViewController: UIViewController {
         let card3 = CardContentViewController()
         card3.name = "안녕안녕안녕"
         card3.view.frame = cardFrame
-        
-        let card4 = CardContentViewController()
-        card4.name = "안녕안녕안녕"
-        card4.view.frame = cardFrame
-
-        let card5 = CardContentViewController()
-        card5.name = "안녕안녕안녕"
-        card5.view.frame = cardFrame
-
-        let card6 = CardContentViewController()
-        card6.name = "안녕안녕안녕"
-        card6.view.frame = cardFrame
-
-        let card7 = CardContentViewController()
-        card7.name = "안녕안녕안녕"
-        card7.view.frame = cardFrame
-
-        let card8 = CardContentViewController()
-        card8.name = "안녕안녕안녕"
-        card8.view.frame = cardFrame
 
         
         self.cardContents.append(card1)
@@ -189,11 +169,13 @@ extension ViewController: CardSettingTableViewDelegate{
     
     func tableView(didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == 0{
-            self.showTitleAlert()
+            self.showNameAlert()
+        }else if indexPath.section == 1{
+            self.showSubNameAlert()
         }
     }
     
-    func showTitleAlert(){
+    func showNameAlert(){
         
         let alert = UIAlertController(title: "제목", message: nil, preferredStyle: UIAlertControllerStyle.alert)
         alert.addAction(UIAlertAction(title: "확인", style: UIAlertActionStyle.default, handler: { _ in
@@ -209,6 +191,26 @@ extension ViewController: CardSettingTableViewDelegate{
                 textField.text = nameText
             }else{
                 textField.placeholder = "제목을 입력해주세요"
+            }
+        })
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    func showSubNameAlert(){
+        let alert = UIAlertController(title: "설명", message: nil, preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "확인", style: UIAlertActionStyle.default, handler: { _ in
+            if let textFields = alert.textFields, textFields.count > 0, let text = textFields[0].text, let currentVC = self.currentVC{
+                
+                currentVC.subName = text
+                self.settingTableView?.reloadData()
+            }
+        }))
+        alert.addTextField(configurationHandler: {(textField: UITextField!) in
+            
+            if let currentVC = self.currentVC, let subNameText = currentVC.subName, subNameText != ""{
+                textField.text = subNameText
+            }else{
+                textField.placeholder = "설명을 입력해주세요"
             }
         })
         self.present(alert, animated: true, completion: nil)
