@@ -11,12 +11,16 @@ import UIKit
 class CardContentViewController: UIViewController {
 
     var index = 0
-    var name: String?
+    var name: String?{
+        didSet{
+            self.nameLabel?.text = name
+        }
+    }
     var body: String?
+    var nameLabel: UILabel?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         self.setContentsView()
     }
 
@@ -34,19 +38,15 @@ class CardContentViewController: UIViewController {
             nameLabel.text = name
             nameLabel.textAlignment = .center
             self.view.addSubview(nameLabel)
+            self.nameLabel = nameLabel
             
             nameLabel.translatesAutoresizingMaskIntoConstraints = false
             let margins = view.layoutMarginsGuide
-            nameLabel.leadingAnchor.constraint(equalTo: margins.leadingAnchor).isActive = true
-            nameLabel.trailingAnchor.constraint(equalTo: margins.trailingAnchor).isActive = true
+            nameLabel.leadingAnchor.constraint(equalTo: margins.leadingAnchor, constant: 16.0).isActive = true
+            nameLabel.trailingAnchor.constraint(equalTo: margins.trailingAnchor,  constant: -16.0).isActive = true
             nameLabel.centerYAnchor.constraint(equalTo: margins.centerYAnchor).isActive = true
         }
-    }
-    
-    func updateContents(){
-        
-    }
-    
+    }    
 
     /*
     // MARK: - Navigation

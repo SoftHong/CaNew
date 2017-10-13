@@ -8,9 +8,18 @@
 
 import UIKit
 
+protocol CardSettingTableViewDelegate{
+    func tableView(didSelectRowAt indexPath: IndexPath)
+}
+
 class CardSettingTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
 
-    var targetCard: CardContentViewController?
+    var customDelegate: CardSettingTableViewDelegate?
+    var targetCard: CardContentViewController?{
+        didSet{
+            self.reloadData()
+        }
+    }
     let reuseCellId = "reuseCardSettingCellId"
     let sections = ["제목", "설명"]
     
@@ -31,7 +40,6 @@ class CardSettingTableView: UITableView, UITableViewDelegate, UITableViewDataSou
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return self.sections.count
@@ -58,10 +66,14 @@ class CardSettingTableView: UITableView, UITableViewDelegate, UITableViewDataSou
         
         if let targetCard = targetCard, let name = targetCard.name{
             cell.textLabel?.text = name
-            print("hi")
         }
-
         
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        self.deselectRow(at: indexPath, animated: true)
+        self.customDelegate?.tableView(didSelectRowAt: indexPath)
     }
 }

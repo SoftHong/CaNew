@@ -13,6 +13,8 @@ class ViewController: UIViewController {
     var pageVC: UIPageViewController?
     var cardContents = [CardContentViewController]()
     var settingTableView: CardSettingTableView?
+    var pendingVC: CardContentViewController?
+    var currentVC: CardContentViewController?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,23 +25,41 @@ class ViewController: UIViewController {
         
         let card1 = CardContentViewController()
         card1.name = "안녕"
-        card1.view.backgroundColor = UIColor.gray
         card1.view.frame = cardFrame
         
         let card2 = CardContentViewController()
         card2.name = "안녕안녕"
-        card2.view.backgroundColor = UIColor.orange
         card2.view.frame = cardFrame
         
         let card3 = CardContentViewController()
         card3.name = "안녕안녕안녕"
-        card3.view.backgroundColor = UIColor.green
         card3.view.frame = cardFrame
+        
+        let card4 = CardContentViewController()
+        card4.name = "안녕안녕안녕"
+        card4.view.frame = cardFrame
+
+        let card5 = CardContentViewController()
+        card5.name = "안녕안녕안녕"
+        card5.view.frame = cardFrame
+
+        let card6 = CardContentViewController()
+        card6.name = "안녕안녕안녕"
+        card6.view.frame = cardFrame
+
+        let card7 = CardContentViewController()
+        card7.name = "안녕안녕안녕"
+        card7.view.frame = cardFrame
+
+        let card8 = CardContentViewController()
+        card8.name = "안녕안녕안녕"
+        card8.view.frame = cardFrame
+
         
         self.cardContents.append(card1)
         self.cardContents.append(card2)
         self.cardContents.append(card3)
-        
+
         self.updateIndex()
         self.setPageVC()
         self.setupPageControl()
@@ -51,22 +71,28 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    fileprivate func updateSettingTableView(){
-        
+    fileprivate func updateSettingTableView(targetCard: CardContentViewController){
+        self.settingTableView?.targetCard = targetCard
     }
     
     fileprivate func setSettingTableView(){
         
+        // init
         let settingTableView = CardSettingTableView.init()
+        settingTableView.customDelegate = self
+        self.settingTableView = settingTableView
         self.view.addSubview(settingTableView)
+        if cardContents.count > 0{
+            settingTableView.targetCard = cardContents[0]
+            self.currentVC = settingTableView.targetCard
+        }
         
+        // auto layout
         settingTableView.translatesAutoresizingMaskIntoConstraints = false
-        
         let margins = view.layoutMarginsGuide
         settingTableView.leadingAnchor.constraint(equalTo: margins.leadingAnchor).isActive = true
         settingTableView.trailingAnchor.constraint(equalTo: margins.trailingAnchor).isActive = true
         settingTableView.bottomAnchor.constraint(equalTo: margins.bottomAnchor).isActive = true
-        
         if let pageVC = self.pageVC{
             settingTableView.topAnchor.constraint(equalTo: pageVC.view.bottomAnchor).isActive = true
         }else{
@@ -95,9 +121,9 @@ class ViewController: UIViewController {
     
     fileprivate func setupPageControl() {
         let appearance = UIPageControl.appearance()
-        appearance.pageIndicatorTintColor = UIColor.gray
-        appearance.currentPageIndicatorTintColor = UIColor.white
-        appearance.backgroundColor = UIColor.darkGray
+        appearance.pageIndicatorTintColor = UIColor.lightGray
+        appearance.currentPageIndicatorTintColor = UIColor.gray
+//        appearance.backgroundColor = UIColor.darkGray
     }
     
     fileprivate func updateIndex(){
@@ -105,7 +131,6 @@ class ViewController: UIViewController {
             element.index = index
         }
     }
-
 }
 
 extension ViewController: UIPageViewControllerDelegate{
@@ -115,9 +140,21 @@ extension ViewController: UIPageViewControllerDelegate{
             return
         }
         
+        if let pendingVC = self.pendingVC{
+            self.updateSettingTableView(targetCard: pendingVC)
+            self.currentVC = pendingVC
+        }
+    }
+    
+    func pageViewController(_ pageViewController: UIPageViewController, willTransitionTo pendingViewControllers: [UIViewController]) {
         
+        if pendingViewControllers.count > 0, let pendingVC = pendingViewControllers[0] as? CardContentViewController{
+            self.pendingVC = pendingVC
+        }
     }
 }
+
+
 
 extension ViewController: UIPageViewControllerDataSource{
     
@@ -145,5 +182,35 @@ extension ViewController: UIPageViewControllerDataSource{
     
     func presentationIndex(for pageViewController: UIPageViewController) -> Int {
         return 0
+    }
+}
+
+extension ViewController: CardSettingTableViewDelegate{
+    
+    func tableView(didSelectRowAt indexPath: IndexPath) {
+        if indexPath.section == 0{
+            self.showTitleAlert()
+        }
+    }
+    
+    func showTitleAlert(){
+        
+        let alert = UIAlertController(title: "제목", message: nil, preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "확인", style: UIAlertActionStyle.default, handler: { _ in
+            if let textFields = alert.textFields, textFields.count > 0, let text = textFields[0].text, let currentVC = self.currentVC{
+                
+                currentVC.name = text
+                self.settingTableView?.reloadData()
+            }
+        }))
+        alert.addTextField(configurationHandler: {(textField: UITextField!) in
+            
+            if let currentVC = self.currentVC, let nameText = currentVC.name, nameText != ""{
+                textField.text = nameText
+            }else{
+                textField.placeholder = "제목을 입력해주세요"
+            }
+        })
+        self.present(alert, animated: true, completion: nil)
     }
 }
