@@ -60,6 +60,12 @@ class CardSettingTableView: UITableView, UITableViewDelegate, UITableViewDataSou
         return sectionLabel
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        self.deselectRow(at: indexPath, animated: true)
+        self.customDelegate?.tableView(didSelectRowAt: indexPath)
+    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         var cell = UITableViewCell.init()
@@ -69,19 +75,15 @@ class CardSettingTableView: UITableView, UITableViewDelegate, UITableViewDataSou
         
         if let targetCard = targetCard{
             if indexPath.section == 0, let name = targetCard.name{
-                cell.textLabel?.text = name
+                self.applyText(cell: cell, text: name)
             }else if indexPath.section == 1, let subName = targetCard.subName{
-                cell.textLabel?.text = subName
+                self.applyText(cell: cell, text: subName)
             }
         }
         return cell
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        self.deselectRow(at: indexPath, animated: true)
-        self.customDelegate?.tableView(didSelectRowAt: indexPath)
+    func applyText(cell: UITableViewCell, text:String){
+        cell.textLabel?.text = text
     }
-    
-
 }

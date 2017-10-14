@@ -10,6 +10,7 @@
 		C12F04471F8C953E00316006 /* CardSettingTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12F04461F8C953E00316006 /* CardSettingTableView.swift */; };
 		C14AFAE91F62DAB300283D9E /* CardContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14AFAE81F62DAB300283D9E /* CardContentViewController.swift */; };
 		C15059851F9068EB00906142 /* UIFont+Custom.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15059841F9068EB00906142 /* UIFont+Custom.swift */; };
+		C191FB4F1F92402B0008BE6F /* SDMiSaeng.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C191FB4E1F9240190008BE6F /* SDMiSaeng.ttf */; };
 		C1AA0EDD1F62783600209445 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1AA0EDC1F62783600209445 /* AppDelegate.swift */; };
 		C1AA0EDF1F62783600209445 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1AA0EDE1F62783600209445 /* ViewController.swift */; };
 		C1AA0EE21F62783600209445 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C1AA0EE01F62783600209445 /* Main.storyboard */; };
@@ -40,6 +41,7 @@
 		C12F04461F8C953E00316006 /* CardSettingTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardSettingTableView.swift; sourceTree = "<group>"; };
 		C14AFAE81F62DAB300283D9E /* CardContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardContentViewController.swift; sourceTree = "<group>"; };
 		C15059841F9068EB00906142 /* UIFont+Custom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Custom.swift"; sourceTree = "<group>"; };
+		C191FB4E1F9240190008BE6F /* SDMiSaeng.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = SDMiSaeng.ttf; sourceTree = "<group>"; };
 		C1AA0ED91F62783600209445 /* CaNew.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CaNew.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C1AA0EDC1F62783600209445 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C1AA0EDE1F62783600209445 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -103,6 +105,7 @@
 		C1AA0EDB1F62783600209445 /* CaNew */ = {
 			isa = PBXGroup;
 			children = (
+				C191FB4E1F9240190008BE6F /* SDMiSaeng.ttf */,
 				C1AA0EDC1F62783600209445 /* AppDelegate.swift */,
 				C15059841F9068EB00906142 /* UIFont+Custom.swift */,
 				C1AA0EDE1F62783600209445 /* ViewController.swift */,
@@ -244,6 +247,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C191FB4F1F92402B0008BE6F /* SDMiSaeng.ttf in Resources */,
 				C1AA0EE71F62783600209445 /* LaunchScreen.storyboard in Resources */,
 				C1AA0EE41F62783600209445 /* Assets.xcassets in Resources */,
 				C1AA0EE21F62783600209445 /* Main.storyboard in Resources */,

@@ -8,17 +8,15 @@
 
 import UIKit
 
-//enum CustomFont: String {
-//    case firaSansMedium     = "FiraSans-Medium"
-//    case firaSansRegular    = "FiraSans-Regular"
-//    case firaSansBold       = "FiraSans-Bold"
-//}
+enum CustomFont: String {
+    case SDMiSaeng     = "SDMiSaeng"
+}
 
 extension UIFont {
-//    /**
-//     Initializes an UIFont using a predefined enumeration and a given size.
-//     */
-//    convenience init?(customFont: CustomFont, withSize size: CGFloat) {
-//        self.init(name: customFont.rawValue, size: size)
-//    }
+    /**
+     Initializes an UIFont using a predefined enumeration and a given size.
+     */
+    convenience init?(customFont: CustomFont, withSize size: CGFloat) {
+        self.init(name: customFont.rawValue, size: size)
+    }
 }
