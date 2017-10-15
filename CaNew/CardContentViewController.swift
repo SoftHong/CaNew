@@ -15,7 +15,10 @@ class CardContentViewController: UIViewController {
     var bgImageView: UIImageView?
     var name: String?{
         didSet{
-            self.nameLabel?.text = name
+            if let nameLabel = self.nameLabel{
+                nameLabel.text = name
+            }
+//            self.nameLabel?.text = name
 //            if let name = self.name{
 //                let attrString = NSMutableAttributedString(string: name, attributes: [NSBackgroundColorAttributeName: UIColor.init(red: 1.0, green: 1.0, blue: 1.0, alpha: 0.5)])
 //                self.nameLabel?.attributedText = attrString
@@ -64,9 +67,11 @@ class CardContentViewController: UIViewController {
         nameLabel.numberOfLines = 0
         nameLabel.textAlignment = .center
         
-        let nameLabelGesture = UIPanGestureRecognizer(target: self, action: #selector(self.tapNameLabel))
+        let nameLabelDrag = UIPanGestureRecognizer(target: self, action: #selector(self.tapNameLabel))
+        let nameLabelZoom = UIPinchGestureRecognizer(target:self, action: #selector(self.zoomNameLabel))
         nameLabel.isUserInteractionEnabled = true
-        nameLabel.addGestureRecognizer(nameLabelGesture)
+        nameLabel.addGestureRecognizer(nameLabelDrag)
+        nameLabel.addGestureRecognizer(nameLabelZoom)
 
         self.view.addSubview(nameLabel)
         self.nameLabel = nameLabel
@@ -97,19 +102,6 @@ class CardContentViewController: UIViewController {
         iconImageView.centerXAnchor.constraint(equalTo: margins.centerXAnchor, constant: 0.0).isActive = true
         iconImageView.centerYAnchor.constraint(equalTo: margins.centerYAnchor, constant: 0.0).isActive = true
 
-//        nameLabel.leadingAnchor.constraint(equalTo: bgImageView.leadingAnchor, constant: 16.0).isActive = true
-//        nameLabel.trailingAnchor.constraint(equalTo: bgImageView.trailingAnchor,  constant: -16.0).isActive = true
-//        nameLabel.topAnchor.constraint(equalTo: bgImageView.topAnchor, constant: 16.0).isActive = true
-//        nameLabel.bottomAnchor.constraint(equalTo: bgImageView.bottomAnchor,  constant: 16.0).isActive = true
-    
-        nameLabel.widthAnchor.constraint(lessThanOrEqualTo: margins.widthAnchor, multiplier: 0.7).isActive = true
-        nameLabel.centerXAnchor.constraint(equalTo: margins.centerXAnchor, constant: 0.0).isActive = true
-        nameLabel.centerYAnchor.constraint(equalTo: margins.centerYAnchor, constant: 0.0).isActive = true
-        
-//        subNameLabel.leadingAnchor.constraint(equalTo: margins.leadingAnchor, constant: 16.0).isActive = true
-//        subNameLabel.trailingAnchor.constraint(equalTo: margins.trailingAnchor,  constant: -16.0).isActive = true
-//        subNameLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 16.0).isActive = true
-//        subNameLabel.bottomAnchor.constraint(equalTo: margins.bottomAnchor, constant: -16.0).isActive = true
     }
 
     /*
@@ -123,8 +115,14 @@ class CardContentViewController: UIViewController {
     */
     
     func tapNameLabel(sender:UITapGestureRecognizer){
-        print("\(sender.location(in: sender.view))")
+        let location = sender.location(in: sender.view)
+        if let nameLabel = self.nameLabel{
+            let movedLocation = CGAffineTransform.init(translationX: location.x/2, y: location.y/2)
+            nameLabel.frame = nameLabel.frame.applying(movedLocation)
+        }
+    }
+    
+    func zoomNameLabel(sender:UITapGestureRecognizer){
         dump(sender)
     }
-
 }

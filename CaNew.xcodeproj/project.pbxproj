@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C11DE6061F93847500F268BA /* CardLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C11DE6051F93847500F268BA /* CardLabel.swift */; };
 		C12F04471F8C953E00316006 /* CardSettingTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12F04461F8C953E00316006 /* CardSettingTableView.swift */; };
 		C14AFAE91F62DAB300283D9E /* CardContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14AFAE81F62DAB300283D9E /* CardContentViewController.swift */; };
 		C15059851F9068EB00906142 /* UIFont+Custom.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15059841F9068EB00906142 /* UIFont+Custom.swift */; };
@@ -38,6 +39,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C11DE6051F93847500F268BA /* CardLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardLabel.swift; sourceTree = "<group>"; };
 		C12F04461F8C953E00316006 /* CardSettingTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardSettingTableView.swift; sourceTree = "<group>"; };
 		C14AFAE81F62DAB300283D9E /* CardContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardContentViewController.swift; sourceTree = "<group>"; };
 		C15059841F9068EB00906142 /* UIFont+Custom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Custom.swift"; sourceTree = "<group>"; };
@@ -111,6 +113,7 @@
 				C1AA0EDE1F62783600209445 /* ViewController.swift */,
 				C12F04461F8C953E00316006 /* CardSettingTableView.swift */,
 				C14AFAE81F62DAB300283D9E /* CardContentViewController.swift */,
+				C11DE6051F93847500F268BA /* CardLabel.swift */,
 				C1AA0EE01F62783600209445 /* Main.storyboard */,
 				C1AA0EE31F62783600209445 /* Assets.xcassets */,
 				C1AA0EE51F62783600209445 /* LaunchScreen.storyboard */,
@@ -277,6 +280,7 @@
 			files = (
 				C14AFAE91F62DAB300283D9E /* CardContentViewController.swift in Sources */,
 				C1AA0EDF1F62783600209445 /* ViewController.swift in Sources */,
+				C11DE6061F93847500F268BA /* CardLabel.swift in Sources */,
 				C1AA0EDD1F62783600209445 /* AppDelegate.swift in Sources */,
 				C15059851F9068EB00906142 /* UIFont+Custom.swift in Sources */,
 				C12F04471F8C953E00316006 /* CardSettingTableView.swift in Sources */,
