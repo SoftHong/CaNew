@@ -10,30 +10,19 @@ import UIKit
 
 class CardContentViewController: UIViewController {
 
+    var mode: CardMode = .square
     var index = 0
     var iconImageView: UIImageView?
     var bgImageView: UIImageView?
-    var name: String?{
+    var text: String?{
         didSet{
-            if let nameLabel = self.nameLabel{
-                nameLabel.text = name
+            if let textLabel = self.textLabel{
+                textLabel.text = text
             }
-//            self.nameLabel?.text = name
-//            if let name = self.name{
-//                let attrString = NSMutableAttributedString(string: name, attributes: [NSBackgroundColorAttributeName: UIColor.init(red: 1.0, green: 1.0, blue: 1.0, alpha: 0.5)])
-//                self.nameLabel?.attributedText = attrString
-//            }
         }
     }
-    var subName: String?{
-        didSet{
-            self.subNameLabel?.text = subName
-        }
-    }
-    var nameFontSize = 24
-    var subNameFontSize = 20
-    var nameLabel: UILabel?
-    var subNameLabel: UILabel?
+    
+    var textLabel: UILabel?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,63 +34,74 @@ class CardContentViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    func parse(card: CNCard){
+        self.mode = card.mode
+        self.text = card.text
+    }
+    
     func setContentsView(){
-        
-        let bgImage = UIImage.init(named: "jesun")
+
+        let imageSize = CGSize.init(width: view.frame.width, height: view.frame.width)
+        let bgImage = UIImage.init(named: "jesun")?.resizeImage(targetSize: imageSize)
+
         let bgImageView = UIImageView.init(image: bgImage)
-        bgImageView.contentMode = .scaleAspectFit
+        bgImageView.frame = CGRect.init(x: 0, y: 0, width: view.frame.width, height: view.frame.width)
+        bgImageView.contentMode = .scaleAspectFill
+        bgImageView.clipsToBounds = true
         self.view.addSubview(bgImageView)
         self.bgImageView = bgImageView
 
-        let iconImage = UIImage.init(named: "hello")
-        let iconImageView = UIImageView.init(image: iconImage)
-        iconImageView.contentMode = .scaleAspectFit
-        self.view.addSubview(iconImageView)
-        self.iconImageView = iconImageView
-        
         let nameFrame = CGRect.init()
-        let nameLabel = UILabel.init(frame: nameFrame)
-        nameLabel.font = UIFont.init(customFont: .SDMiSaeng, withSize: 35)
-        nameLabel.text = name
-        nameLabel.backgroundColor = UIColor.init(red: 1.0, green: 1.0, blue: 1.0, alpha: 0.5)
-        nameLabel.numberOfLines = 0
-        nameLabel.textAlignment = .center
+        let textLabel = UILabel.init(frame: nameFrame)
+        textLabel.font = UIFont.init(customFont: .SDMiSaeng, withSize: 35)
+        textLabel.text = text
+//        textLabel.backgroundColor = UIColor.init(red: 1.0, green: 1.0, blue: 1.0, alpha: 0.5)
         
-        let nameLabelDrag = UIPanGestureRecognizer(target: self, action: #selector(self.tapNameLabel))
-        let nameLabelZoom = UIPinchGestureRecognizer(target:self, action: #selector(self.zoomNameLabel))
-        nameLabel.isUserInteractionEnabled = true
-        nameLabel.addGestureRecognizer(nameLabelDrag)
-        nameLabel.addGestureRecognizer(nameLabelZoom)
-
-        self.view.addSubview(nameLabel)
-        self.nameLabel = nameLabel
+        textLabel.numberOfLines = 0
+        textLabel.textAlignment = .center
+        textLabel.textColor = UIColor.white
         
-        let subNameFrame = CGRect.init()
-        let subNameLabel = UILabel.init(frame: subNameFrame)
-        subNameLabel.text = subName
-        subNameLabel.numberOfLines = 0
-        subNameLabel.textAlignment = .center
-        self.view.addSubview(subNameLabel)
-        self.subNameLabel = subNameLabel
-
-        iconImageView.translatesAutoresizingMaskIntoConstraints = false
-        nameLabel.translatesAutoresizingMaskIntoConstraints = false
-        subNameLabel.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(textLabel)
+        self.textLabel = textLabel
+        
+        textLabel.translatesAutoresizingMaskIntoConstraints = false
         bgImageView.translatesAutoresizingMaskIntoConstraints = false
-
-        let margins = view.layoutMarginsGuide
-//        bgImageView.heightAnchor.constraint(lessThanOrEqualTo: margins.heightAnchor, multiplier: 1.0).isActive = true
-//        bgImageView.widthAnchor.constraint(lessThanOrEqualTo: margins.widthAnchor, multiplier: 1.0).isActive = true
-        bgImageView.topAnchor.constraint(equalTo: margins.topAnchor).isActive = true
-        bgImageView.bottomAnchor.constraint(equalTo: margins.bottomAnchor).isActive = true
-        bgImageView.leadingAnchor.constraint(equalTo: margins.leadingAnchor, constant: 0.0).isActive = true
-        bgImageView.trailingAnchor.constraint(equalTo: margins.trailingAnchor, constant: 0.0).isActive = true
         
-        iconImageView.heightAnchor.constraint(lessThanOrEqualTo: margins.heightAnchor, multiplier: 0.5).isActive = true
-        iconImageView.widthAnchor.constraint(lessThanOrEqualTo: margins.widthAnchor, multiplier: 0.5).isActive = true
-        iconImageView.centerXAnchor.constraint(equalTo: margins.centerXAnchor, constant: 0.0).isActive = true
-        iconImageView.centerYAnchor.constraint(equalTo: margins.centerYAnchor, constant: 0.0).isActive = true
-
+        
+        if self.mode == .square{
+            
+            bgImageView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+            bgImageView.heightAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+            
+            textLabel.layer.borderColor = UIColor.init(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0).cgColor
+            textLabel.layer.borderWidth = 1.0
+            
+            textLabel.topAnchor.constraint(equalTo: bgImageView.topAnchor, constant: Constants.Margin.base * 2).isActive = true
+            textLabel.bottomAnchor.constraint(equalTo: bgImageView.bottomAnchor, constant: -Constants.Margin.base * 2).isActive = true
+            textLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.Margin.base * 2).isActive = true
+            textLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Constants.Margin.base * 2).isActive = true
+            
+        }else if self.mode == .movie {
+            
+            textLabel.font = UIFont.init(customFont: .SDMiSaeng, withSize: 25)
+            bgImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+            bgImageView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+            bgImageView.heightAnchor.constraint(equalTo: view.widthAnchor, multiplier: 9/16).isActive = true
+            textLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.Margin.base * 2).isActive = true
+            textLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Constants.Margin.base * 2).isActive = true
+            textLabel.bottomAnchor.constraint(equalTo: bgImageView.bottomAnchor, constant: -Constants.Margin.base / 2).isActive = true
+            
+        }else if self.mode == .rectangle{
+            
+            bgImageView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+            bgImageView.heightAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+            
+            textLabel.topAnchor.constraint(equalTo: bgImageView.bottomAnchor).isActive = true
+            textLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+            textLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+            textLabel.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 1/3).isActive = true
+            textLabel.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        }
     }
 
     /*
@@ -114,15 +114,4 @@ class CardContentViewController: UIViewController {
     }
     */
     
-    func tapNameLabel(sender:UITapGestureRecognizer){
-        let location = sender.location(in: sender.view)
-        if let nameLabel = self.nameLabel{
-            let movedLocation = CGAffineTransform.init(translationX: location.x/2, y: location.y/2)
-            nameLabel.frame = nameLabel.frame.applying(movedLocation)
-        }
-    }
-    
-    func zoomNameLabel(sender:UITapGestureRecognizer){
-        dump(sender)
-    }
 }
