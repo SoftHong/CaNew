@@ -14,19 +14,13 @@ class CardContentViewController: UIViewController {
     var index = 0
     var iconImageView: UIImageView?
     var bgImageView: UIImageView?
-    var text: String?{
-        didSet{
-            if let textLabel = self.textLabel{
-                textLabel.text = text
-            }
-        }
-    }
-    
+    var text: String?
     var textLabel: UILabel?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setContentsView()
+        self.setGesture()
     }
 
     override func didReceiveMemoryWarning() {
@@ -37,6 +31,20 @@ class CardContentViewController: UIViewController {
     func parse(card: CNCard){
         self.mode = card.mode
         self.text = card.text
+    }
+    
+    func setGesture(){
+        if let imageView = self.bgImageView{
+            imageView.isUserInteractionEnabled = true
+            let tap = UITapGestureRecognizer.init(target: self, action: #selector(handleImageTap(_:)))
+            imageView.addGestureRecognizer(tap)
+        }
+        
+        if let textLabel = self.textLabel{
+            textLabel.isUserInteractionEnabled = true
+            let tap = UITapGestureRecognizer.init(target: self, action: #selector(handleTextLabelTap(_:)))
+            textLabel.addGestureRecognizer(tap)
+        }
     }
     
     func setContentsView(){
@@ -51,31 +59,25 @@ class CardContentViewController: UIViewController {
         self.view.addSubview(bgImageView)
         self.bgImageView = bgImageView
 
-        let nameFrame = CGRect.init()
-        let textLabel = UILabel.init(frame: nameFrame)
+        let textLabel = UILabel.init()
         textLabel.font = UIFont.init(customFont: .SDMiSaeng, withSize: 35)
         textLabel.text = text
-//        textLabel.backgroundColor = UIColor.init(red: 1.0, green: 1.0, blue: 1.0, alpha: 0.5)
-        
         textLabel.numberOfLines = 0
         textLabel.textAlignment = .center
         textLabel.textColor = UIColor.white
-        
         self.view.addSubview(textLabel)
         self.textLabel = textLabel
         
         textLabel.translatesAutoresizingMaskIntoConstraints = false
         bgImageView.translatesAutoresizingMaskIntoConstraints = false
         
-        
         if self.mode == .square{
             
             bgImageView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
             bgImageView.heightAnchor.constraint(equalTo: view.widthAnchor).isActive = true
             
-            textLabel.layer.borderColor = UIColor.init(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0).cgColor
             textLabel.layer.borderWidth = 1.0
-            
+            textLabel.layer.borderColor = UIColor.init(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0).cgColor
             textLabel.topAnchor.constraint(equalTo: bgImageView.topAnchor, constant: Constants.Margin.base * 2).isActive = true
             textLabel.bottomAnchor.constraint(equalTo: bgImageView.bottomAnchor, constant: -Constants.Margin.base * 2).isActive = true
             textLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.Margin.base * 2).isActive = true
@@ -83,10 +85,11 @@ class CardContentViewController: UIViewController {
             
         }else if self.mode == .movie {
             
-            textLabel.font = UIFont.init(customFont: .SDMiSaeng, withSize: 25)
             bgImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
             bgImageView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
             bgImageView.heightAnchor.constraint(equalTo: view.widthAnchor, multiplier: 9/16).isActive = true
+            
+            textLabel.font = UIFont.init(customFont: .SDMiSaeng, withSize: 25)
             textLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.Margin.base * 2).isActive = true
             textLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Constants.Margin.base * 2).isActive = true
             textLabel.bottomAnchor.constraint(equalTo: bgImageView.bottomAnchor, constant: -Constants.Margin.base / 2).isActive = true
@@ -113,5 +116,15 @@ class CardContentViewController: UIViewController {
         // Pass the selected object to the new view controller.
     }
     */
-    
 }
+
+extension CardContentViewController: UIGestureRecognizerDelegate{
+    @objc func handleImageTap(_ sender: UITapGestureRecognizer? = nil){
+        print("image tap")
+    }
+    
+    @objc func handleTextLabelTap(_ sender: UITapGestureRecognizer? = nil){
+        print("text tap")
+    }
+}
+

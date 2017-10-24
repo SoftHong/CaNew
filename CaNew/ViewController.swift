@@ -27,7 +27,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        self.cardMode = .movie
+        self.cardMode = .square
         
         let card1 = CNCard()
         card1.text = "안녕"
