@@ -21,6 +21,7 @@ class CardContentViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         self.setContentsView()
         self.setGesture()
     }
@@ -35,6 +36,7 @@ class CardContentViewController: UIViewController {
         self.text = card.text
     }
     
+
     func setGesture(){
         if let imageView = self.bgImageView{
             imageView.isUserInteractionEnabled = true
@@ -75,6 +77,7 @@ class CardContentViewController: UIViewController {
         let textView = UITextView()
         textView.isHidden = true
         textView.delegate = self
+        textView.autocorrectionType = .no
         textView.backgroundColor = UIColor.clear
         textView.font = textLabel.font
         textView.textColor = textLabel.textColor

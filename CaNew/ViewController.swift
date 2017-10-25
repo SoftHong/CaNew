@@ -27,6 +27,8 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
+        self.setNavi()
+        
         self.cardMode = .square
         
         let card1 = CNCard()
@@ -40,7 +42,6 @@ class ViewController: UIViewController {
         let card3 = CNCard()
         card3.text = "안녕안녕안녕"
         card3.mode = self.cardMode
-
 
         self.cardContents.append(card1)
         self.cardContents.append(card2)
@@ -58,7 +59,6 @@ class ViewController: UIViewController {
         self.cardVCs.append(cardVC2)
         self.cardVCs.append(cardVC3)
 
-//        self.updateIndex()
         self.setPageVC()
         self.setupPageControl()
     }
@@ -66,6 +66,14 @@ class ViewController: UIViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func setNavi(){
+        let prevPageBtn = UIBarButtonItem.init(title: "prev", style: .plain, target: self, action: #selector(goToPrevPage))
+
+        let nextPageBtn = UIBarButtonItem.init(title: "next", style: .plain, target: self, action: #selector(goToNextPage))
+
+        self.navigationItem.rightBarButtonItems = [nextPageBtn, prevPageBtn]
     }
     
     fileprivate func setPageVC(){
@@ -117,6 +125,24 @@ class ViewController: UIViewController {
 //            element.index = index
 //        }
 //    }
+    
+    @objc func goToNextPage(){
+        
+        guard let pageVC = self.pageVC else { return }
+        guard let currentVC = pageVC.viewControllers?.first else { return }
+        guard let nextVC =  pageVC.dataSource?.pageViewController(pageVC, viewControllerAfter: currentVC) as? CardContentViewController else { return }
+        
+        pageVC.setViewControllers([nextVC], direction: .forward, animated: true, completion: nil)
+    }
+    
+    @objc func goToPrevPage(){
+        
+        guard let pageVC = self.pageVC else { return }
+        guard let currentVC = pageVC.viewControllers?.first else { return }
+        guard let prevVC = pageVC.dataSource?.pageViewController(pageVC, viewControllerBefore: currentVC) else { return }
+        
+        pageVC.setViewControllers([prevVC], direction: .reverse, animated: true, completion: nil)
+    }
 }
 
 extension ViewController: UIPageViewControllerDelegate{
@@ -164,6 +190,7 @@ extension ViewController: UIPageViewControllerDataSource{
                 return currentCardVC
             }
         }
+        
         return nil
     }
     
@@ -172,6 +199,12 @@ extension ViewController: UIPageViewControllerDataSource{
     }
     
     func presentationIndex(for pageViewController: UIPageViewController) -> Int {
-        return 0
+        
+        if let currentVC = pageViewController.viewControllers?.first as? CardContentViewController,
+            let index = self.cardVCs.index(of: currentVC){
+            return index
+        }else{
+            return 0
+        }
     }
 }
